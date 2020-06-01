@@ -1,5 +1,5 @@
 # Sudoku
-Sudoku GUI program built with Tkinter - generates, grades, and solves Sudoku boards
+Sudoku GUI program built with Tkinter - generates, grades, and solves Sudoku boards.
 
 ## Installation
 Clone this repository to get all required files. Double click sudokuGUI.py directly from the file explorer to run this program.

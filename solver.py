@@ -4,25 +4,26 @@ import copy
 
 def generateBoard(remainingNums):
 	newBoard=[
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		["", "", "", "", "", "", "", "", ""],
+		["", "", "", "", "", "", "", "", ""],
+		["", "", "", "", "", "", "", "", ""],
+		["", "", "", "", "", "", "", "", ""],
+		["", "", "", "", "", "", "", "", ""],
+		["", "", "", "", "", "", "", "", ""],
+		["", "", "", "", "", "", "", "", ""],
+		["", "", "", "", "", "", "", "", ""],
+		["", "", "", "", "", "", "", "", ""]
 	]
+
 	solve(newBoard)
 	#remove all but remainingNums numbers
 	for i in range(81-remainingNums):
 		row = random.randint(0, 8)
 		col = random.randint(0, 8)
-		while newBoard[row][col] == 0:
+		while newBoard[row][col] == "":
 			row = random.randint(0, 8)
 			col = random.randint(0, 8)
-		newBoard[row][col] = 0
+		newBoard[row][col] = ""
 	return newBoard
 
 def generateVeryHard():
@@ -56,27 +57,41 @@ def solve(bd):
 					return True 
 				#if that version of board can't create a valid solution, undo our modification of board.
 				else:
-					bd[row][col] = 0
+					bd[row][col] = ""
 		#If no number 1 through 9 can be validly placed in pos, return False. This version of board is invalid.
 		return False
 
+def canBeSolved(bd):
+	bdcpy = copy.deepcopy(bd)
+	if isValidBoard(bdcpy) == False: #if it's not a valid board, false
+		return False
+	solve(bdcpy) #if it is a valid board, see if it's solvable
+	if findNextEmpty(bdcpy) == None:
+		return True
+	else:
+		return False
+
+#Find next empty spot
 def findNextEmpty(bd):
 	for i in range(len(bd)):
 		for j in range(len(bd[i])):
-			if bd[i][j] == 0:
+			if bd[i][j] == "":
 				return (i,j) #row, column
 
-def isSolvable(bd):
+#Checks whether the board is valid - note that a board can be valid yet not be solvable
+def isValidBoard(bd):
 	bdcpy = copy.deepcopy(bd)
 	for i in range(len(bdcpy)):
 		for j in range(len(bdcpy)):
-			if bdcpy[i][j] != 0:
+			if bdcpy[i][j] != "":
 				temp=bdcpy[i][j]
-				bdcpy[i][j]=0
+				bdcpy[i][j]=""
 				if isvalid(bdcpy, temp, (i, j)) == False:
 					return False
 				bdcpy[i][j]=temp
 	return True
+
+
 
 def isvalid(bd, num, pos):
 	#checks whether placing a certain number in a certain position is a valid move.
@@ -94,17 +109,22 @@ def isvalid(bd, num, pos):
 				return False
 	return True
 
-
+#Print the argument board in the command line
 def printBoard(bd):
 	for i in range(len(bd)):
 		if (i%3 == 0) and (i != 0):
 			print("- - - - - - - - - - - - - - - - -")
 		for j in range(len(bd[i])):
+
 			if (j%3 == 0) and (j != 0):
 				print(" | ", end="")
-			print(" "+str(bd[i][j])+" ", end="")
+			if bd[i][j] == "":
+				print("   ", end="")
+			else:
+				print(" "+str(bd[i][j])+" ", end="")
 		print('\n')
 
+#To show the solver used from the command line
 def main(bd):
 	print('\n')
 	print('Board: ')
@@ -113,14 +133,15 @@ def main(bd):
 	print('\n')
 	print('Solution: ')
 	print('\n')
-	if isSolvable(bd) == False:
-		print("This board cannot be solved.")
-	else:
+	if canBeSolved(bd):
 		solve(bd)
 		printBoard(bd)
+	else:
+		print("Board cannot be solved.")
 
 
 #Below code generates and prints a hard board, and prints solution.
 
 # bd = generateHard()
 # main(bd)
+

@@ -13,7 +13,7 @@ Or input your own custom Sudoku board.
 
 ![](images/inputCustom.gif) 
 
-Get a visual cue of your progress using 'Grade Board' - a flash or red means the board (with all current entries) is unsolvable.
+Get a visual cue of your progress using 'Grade Board' - a flash of red means the board (with all current entries) is unsolvable.
 Yellow means it is solvable, but not yet solved. Green indicates a fully solved board.
 
 ![](images/grade.gif)
